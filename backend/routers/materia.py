@@ -13,7 +13,7 @@ def create_materia(data: Materia, session: Session = Depends(get_session)):
     session.refresh(materia_db)
     return materia_db
 
-@router.get("/", response_model=list["Materia"])
+@router.get("/", response_model=list[Materia])
 def get_all_materia(session: Session = Depends(get_session)):
     query = select(Materia)
     result = session.exec(query)
