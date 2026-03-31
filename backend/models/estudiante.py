@@ -1,10 +1,6 @@
-from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, List
+from typing import Optional, List
 from sqlmodel import SQLModel, Field, Relationship
 
-if TYPE_CHECKING:
-    from .anio_seccion import AnioSeccion
-    from .nota import Nota
 
 class Estudiante(SQLModel, table=True):
     __tablename__ = "estudiante"
