@@ -20,7 +20,7 @@ def relate_profesor_materia(data: ProfesorMateria, session: Session = Depends(ge
             ProfesorMateria.profesor_ci == data.profesor_ci,
             ProfesorMateria.materia_id == data.materia_id
         )
-    )
+    ).first()
     if relacion_existente:
         raise HTTPException(status_code=409, detail="La relacion entre profesor y materia ya existe")
     profesor_materia_db = ProfesorMateria.model_validate(data.model_dump())
@@ -28,3 +28,8 @@ def relate_profesor_materia(data: ProfesorMateria, session: Session = Depends(ge
     session.commit()
     session.refresh(profesor_materia_db)
     return profesor_materia_db
+
+@router.get("/", response_model=list[ProfesorMateria])
+def get_all_profesor_materia(session: Session = Depends(get_session)):
+    result = session.exec(select(ProfesorMateria))
+    return result.all()
