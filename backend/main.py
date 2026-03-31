@@ -4,7 +4,7 @@ from typing import List
 
 from database import get_session, engine
 from models import Estudiante, Materia, Nota, Profesor, ProfesorMateria, AnioSeccion
-from routers import anio_seccion
+from routers import anio_seccion, estudiante
 
 app = FastAPI(
     title="Sistema de Gestión de Notas",
@@ -13,6 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(anio_seccion.router)
+app.include_router(estudiante.router)
 
 @app.on_event("startup")
 def on_startup():

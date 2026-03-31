@@ -12,3 +12,11 @@ def create_anio_seccion(data: AnioSeccion, session: Session = Depends(get_sessio
     session.commit()
     session.refresh(anio_seccion_db)
     return anio_seccion_db
+
+@router.get ("/", response_model=list[AnioSeccion])
+def get_all_anio_seccion(session: Session = Depends(get_session)):
+    query = select(AnioSeccion)
+    result = session.exec(query)
+    if not result:
+        raise HTTPException(status_code=404, detail="Anio y seccion no encontrados")
+    return result.all()
