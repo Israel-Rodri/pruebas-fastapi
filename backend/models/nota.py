@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 from sqlmodel import SQLModel, Field, Relationship
-from sqlalchemy.orm import Mapped
 
 if TYPE_CHECKING:
     from .estudiante import Estudiante
@@ -17,8 +16,8 @@ class Nota(SQLModel, table=True):
     estudiante_ci: int = Field(foreign_key="estudiante.ci", nullable=False)
     materia_id: int = Field(foreign_key="materia.id", nullable=False)
 
-    estudiante: Mapped["Estudiante"] = Relationship(back_populates="notas")
-    materia: Mapped["Materia"] = Relationship(back_populates="notas")
+    estudiante: Optional["Estudiante"] = Relationship(back_populates="notas")
+    materia: Optional["Materia"] = Relationship(back_populates="notas")
 
     @property
     def nota_final(self) -> int:

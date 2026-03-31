@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional, List
 from sqlmodel import SQLModel, Field, Relationship
-from sqlalchemy.orm import Mapped
 
 if TYPE_CHECKING:
     from .anio_seccion import AnioSeccion
@@ -21,10 +20,10 @@ class Estudiante(SQLModel, table=True):
         nullable=False
     )
 
-    anio_seccion: Mapped[Optional["AnioSeccion"]] = Relationship(
-        back_populates="estudiante"
+    anio_seccion: Optional["AnioSeccion"] = Relationship(
+        back_populates="estudiantes"
     )
-    notas: Mapped[List["Nota"]] = Relationship(
+    notas: List["Nota"] = Relationship(
         back_populates="estudiante",
         sa_relationship_kwargs={"cascade":"all, delete-orphan"}
     )
