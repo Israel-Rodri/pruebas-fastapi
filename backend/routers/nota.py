@@ -2,11 +2,27 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session, select
 from database import get_session
 from models.nota import Nota
+from models.estudiante import Estudiante
+from models.materia import Materia
 
 router = APIRouter(prefix="/nota", tags=["Notas"])
 
 @router.post("/", response_model=Nota)
 def create_nota(data: Nota, session: Session = Depends(get_session)):
+    estudiante = session.get(Estudiante, data.estudiante_ci)
+    if not estudiante:
+        raise HTTPException(status_code=404, detail="Estudiante no encontrado")
+    materia = session.get(Materia, data.materia_id)
+    if not materia:
+        raise HTTPException(status_code=404, detail="Materia no encontrada")
+    nota_existente = session.exec(
+        select(Nota).where(
+            Nota.estudiante_ci == data.estudiante_ci,
+            Nota.materia_id == data.materia_id
+        )
+    )
+    if nota_existente:
+        raise HTTPException(status_code=409, detail="Ya existe una nota para este estudiante en esta materia")
     nota_db = Nota.model_validate(data.model_dump())
     session.add(nota_db)
     session.commit()
