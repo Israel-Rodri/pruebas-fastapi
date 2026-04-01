@@ -1,10 +1,10 @@
 //Importacion de los componentes especificos
-import ContactForm from "./components/ContactForm"
+import AnioSeccionForm from "./components/AnioSeccionForm"
 
 function App() {
   return(
     <div className="App">
-      <ContactForm />
+      <AnioSeccionForm />
     </div>
   )
 }

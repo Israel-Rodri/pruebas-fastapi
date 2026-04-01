@@ -1,8 +1,7 @@
-from fastapi import FastAPI, HTTPException, Depends, status
-from sqlmodel import Session, select
-from typing import List
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
-from database import get_session, engine
+from database import engine
 from models import Estudiante, Materia, Nota, Profesor, ProfesorMateria, AnioSeccion
 from routers import anio_seccion, estudiante, materia, nota, profesor, profesor_materia
 
@@ -10,6 +9,17 @@ app = FastAPI(
     title="Sistema de Gestión de Notas",
     description="API para la gestión de notas parciales y finales de los estudiantes de educación media y diversificada de la UE Colegio Fundación Taller Escuela",
     version="1.0.0"
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5175",
+        "http://127.0.0.1:5175",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(anio_seccion.router)

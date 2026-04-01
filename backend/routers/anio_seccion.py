@@ -7,6 +7,14 @@ router = APIRouter(prefix="/anio-seccion", tags=["Año y Seccion"])
 
 @router.post("/", response_model=AnioSeccion)
 def create_anio_seccion(data: AnioSeccion, session: Session = Depends(get_session)):
+    anio_seccion_existente = session.exec(
+        select(AnioSeccion).where(
+            AnioSeccion.anio == data.anio,
+            AnioSeccion.seccion == data.seccion
+        )
+    ).first()
+    if anio_seccion_existente:
+        raise HTTPException(status_code=409, detail="El año y la seccion ya se encuentran registrados")
     anio_seccion_db = AnioSeccion.model_validate(data.model_dump())
     session.add(anio_seccion_db)
     session.commit()
