@@ -19,6 +19,6 @@ class Nota(SQLModel, table=True):
         return f"<Nota id:{self.id}>"
 
 class NotaUpdate(SQLModel):
-    nota_1: Optional[int] = Field(ge=0, le=20)
-    nota_2: Optional[int] = Field(ge=0, le=20)
-    nota_3: Optional[int] = Field(ge=0, le=20)
+    nota_1: Optional[int] = None
+    nota_2: Optional[int] = None
+    nota_3: Optional[int] = None

@@ -74,7 +74,7 @@ def update_nota(estudiante_ci: int, materia_id: int, data: NotaUpdate, session: 
             Nota.estudiante_ci == estudiante_ci,
             Nota.materia_id == materia_id
         )
-    )
+    ).first()
     nota_obj = data.model_dump(exclude_unset=True)
     for key, value in nota_obj.items():
         setattr(nota, key, value)
