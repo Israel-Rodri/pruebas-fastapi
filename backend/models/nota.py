@@ -15,9 +15,10 @@ class Nota(SQLModel, table=True):
     estudiante: Optional["Estudiante"] = Relationship(back_populates="notas")
     materia: Optional["Materia"] = Relationship(back_populates="notas")
 
-    @property
-    def nota_final(self) -> int:
-        return self.nota_1+self.nota_2+self.nota_3 / 3
-
     def __repr__(self) -> str:
-        return f"<Nota id:{self.id} nota final:{self.nota_final}>"
+        return f"<Nota id:{self.id}>"
+
+class NotaUpdate(SQLModel):
+    nota_1: Optional[int] = Field(ge=0, le=20)
+    nota_2: Optional[int] = Field(ge=0, le=20)
+    nota_3: Optional[int] = Field(ge=0, le=20)

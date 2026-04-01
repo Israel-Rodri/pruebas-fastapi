@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session, select
 from database import get_session
-from models.nota import Nota
+from models.nota import Nota, NotaUpdate
 from models.estudiante import Estudiante
 from models.materia import Materia
 
@@ -60,3 +60,25 @@ def get_nota_by_ci(materia_id: int, session: Session = Depends(get_session)):
         )
     ).all()
     return result
+
+@router.patch("/{estudiante_ci}&{materia_id}/", response_model=Nota)
+def update_nota(estudiante_ci: int, materia_id: int, data: NotaUpdate, session: Session = Depends(get_session)):
+    estudiante = session.get(Estudiante, estudiante_ci)
+    if not estudiante:
+        raise HTTPException(status_code=404, detail="El estudiante no existe")
+    materia = session.get(Materia, materia_id)
+    if not materia:
+        raise HTTPException(status_code=404, detail="La materia no existe")
+    nota = session.exec(
+        select(Nota).where(
+            Nota.estudiante_ci == estudiante_ci,
+            Nota.materia_id == materia_id
+        )
+    )
+    nota_obj = data.model_dump(exclude_unset=True)
+    for key, value in nota_obj.items():
+        setattr(nota, key, value)
+    session.add(nota)
+    session.commit()
+    session.refresh(nota)
+    return nota
