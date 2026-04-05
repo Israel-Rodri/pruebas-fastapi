@@ -1,6 +1,6 @@
 //Importar el hook useState para poder controlar cambios en el form
 import { useState } from "react";
-import api from "../config/api";
+import api from "../../config/api";
 
 //Creacion de un componente especifico
 function AnioSeccionForm() {

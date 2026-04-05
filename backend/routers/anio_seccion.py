@@ -28,3 +28,12 @@ def get_all_anio_seccion(session: Session = Depends(get_session)):
     if not result:
         raise HTTPException(status_code=404, detail="Anio y seccion no encontrados")
     return result.all()
+
+@router.delete("/{id}")
+def delete_anio_seccion(anio_seccion_id: int, session: Session = Depends(get_session)):
+    anio_seccion = session.get(AnioSeccion, anio_seccion_id)
+    if not anio_seccion:
+        raise HTTPException(status_code=404, detail="Año y seccion no encontrados")
+    session.delete(anio_seccion)
+    session.commit()
+    return {"message":"Año y seccion eliminados de forma exitosa"}
